@@ -7,10 +7,12 @@
    #koks inputas del user
    if ($username != "") {
       $processes = shell_exec("tasklist /FO CSV /V /FI \"USERNAME eq $username\"");
+      
    }
    else {
       $processes = shell_exec("tasklist /FO CSV /V");
    }
+
 
    #procesai sudedami i array
    $data = [];
@@ -18,7 +20,7 @@
    $lines = explode("\n", $processes);
 
    foreach ($lines as $line) {
-      $row = str_getcsv($line);
+      $row = str_getcsv($line, ",", '"', "");
 
       if (empty($header)) {
          $header = $row;
@@ -31,9 +33,9 @@
    #koks inputas format
    if ($format == "csv") {
       $file = fopen("5_log.csv", "w");
-      fputcsv($file, $header);
+      fputcsv($file, $header, ",", '"', "");
       foreach($data as $row) {
-         fputcsv($file, $row);
+         fputcsv($file, $row, ",", '"', "");
       }
       fclose($file);
    }
@@ -51,7 +53,7 @@
       foreach ($data as $row) {
          $html .= "<tr>\n";
          foreach ($row as $cell) {
-               $html .= "<td>\n" . htmlspecialchars($cell) . "</td>\n";
+               $html .= "<td>\n" . htmlspecialchars($cell ?? "") . "</td>\n";
          }
          $html .= "</tr>\n";
       }

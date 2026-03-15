@@ -1,13 +1,13 @@
-
 import os
 import time
+import stat
 
 print("Enter directory or file name or its part")
 term = input()
 
 found = False
 
-for root, dirs, files in os.walk(os.getcwd()): #dabartiniam kataloge visas vyksta
+for root, dirs, files in os.walk(os.getcwd()): #dabartiniam kataloge 
     for file in files:
         if term in file:
             path = os.path.join(root, file)
@@ -29,18 +29,18 @@ if found == False:
 
 
 if found == True:
-    stat = os.stat(path)
+    file_stat = os.stat(path)
     result = ""
     if (os.path.isfile(path) == True):
-        result += f"Name: {os.path.basename(path)}\n"               #pavadinimas
-        result += f"Path: {path}\n"                                 #path 
-        result += f"Access date: {time.ctime(stat.st_atime)}\n"     #acess date 
-        result += f"Creation date: {time.ctime(stat.st_ctime)}\n"   #create date 
+        result += f"Name: {os.path.basename(path)}\n"                    #pavadinimas
+        result += f"Path: {path}\n"                                      #path 
+        result += f"Permissions: {oct(file_stat.st_mode)}\n"             #permissions
+        result += f"Creation date: {time.ctime(file_stat.st_ctime)}\n"   #create date 
     elif os.path.isdir(path):
-        result += f"Direktorijos turinys: {os.listdir(path)}\n"     #contetn of directory
-        result += f"Path: {path}\n"                                 #path 
-        result += f"Access date: {time.ctime(stat.st_atime)}\n"     #acess date     
-        result += f"Creation date: {time.ctime(stat.st_ctime)}\n"   #create date 
+        result += f"Direktorijos turinys: {os.listdir(path)}\n"          #contetn of directory
+        result += f"Path: {path}\n"                                      #path 
+        result += f"Permissions: {oct(file_stat.st_mode)}\n"             #permissions    
+        result += f"Creation date: {time.ctime(file_stat.st_ctime)}\n"   #create date 
     print(result)
 
 with open("4_log.txt", "a") as log:
